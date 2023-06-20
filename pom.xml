@@ -39,9 +39,6 @@
         <url>https://github.com/JWebUnit/jwebunit/issues</url>
     </issueManagement>
     <inceptionYear>2002</inceptionYear>
-    <prerequisites>
-      <maven>3.3.9</maven>
-    </prerequisites>
     <modules>
         <module>jwebunit-code-generator</module>
         <module>jwebunit-core</module>
@@ -325,6 +322,25 @@
             </plugins>
         </pluginManagement>
         <plugins>
+            <plugin>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>3.8.8</version>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>com.mycila</groupId>
                 <artifactId>license-maven-plugin</artifactId>
