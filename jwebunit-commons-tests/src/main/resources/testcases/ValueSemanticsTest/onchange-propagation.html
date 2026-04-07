@@ -1,0 +1,37 @@
+<!--
+
+    Copyright (c) 2002-2015, JWebUnit team.
+
+    This file is part of JWebUnit.
+
+    JWebUnit is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    JWebUnit is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with JWebUnit.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<html>
+<head><title>OnChange Propagation Test</title></head>
+<body>
+<!--
+    Verifies that IElement.setAttribute("value", ...) writes the live DOM value so that
+    the onChange handler can read it via this.value. If setValueAttribute() were used
+    instead (mutating only the HTML attribute), this.value would still return the old
+    live value and onChange would propagate the wrong value to js2.
+-->
+<form method="GET" action="../params.jsp">
+    <input type="text" id="js1" name="js1" value="initial"
+           onChange="document.getElementById('js2').value=this.value;">
+    <input type="text" id="js2" name="js2" value="unchanged">
+    <input type="submit" id="submitBtn" value="Submit">
+</form>
+</body>
+</html>

@@ -23,6 +23,9 @@ import org.htmlunit.WebClientOptions;
 import junit.framework.TestCase;
 import net.sourceforge.jwebunit.api.ITestingEngine;
 
+import java.util.Collections;
+import java.util.List;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -37,6 +40,29 @@ public class HtmlUnitTestingEngineImplTest extends TestCase {
     engine.setThrowExceptionOnScriptError(true);
 
     verify(options).setThrowExceptionOnScriptError(true);
+  }
+
+  public void testSetScriptingEnabledShouldSetJavaScriptEnabledOnUnderlyingWebClient() throws Exception {
+    WebClient client = mock(WebClient.class);
+    WebClientOptions options = mock(WebClientOptions.class);
+    when(client.getOptions()).thenReturn(options);
+    ITestingEngine engine = new HtmlUnitTestingEngineImpl(client);
+
+    engine.setScriptingEnabled(false);
+
+    verify(options).setJavaScriptEnabled(false);
+  }
+
+  public void testGetCookiesReturnsEmptyListWhenCookieJarIsEmpty() throws Exception {
+    WebClient client = new WebClient();
+    HtmlUnitTestingEngineImpl engine = new HtmlUnitTestingEngineImpl(client);
+
+    List<javax.servlet.http.Cookie> result = engine.getCookies();
+
+    assertNotNull("getCookies() must never return null", result);
+    assertEquals("Empty cookie jar should produce an empty list", 0, result.size());
+
+    client.close();
   }
 
 }

@@ -1,0 +1,39 @@
+<!--
+
+    Copyright (c) 2002-2015, JWebUnit team.
+
+    This file is part of JWebUnit.
+
+    JWebUnit is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    JWebUnit is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with JWebUnit.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<html>
+<head><title>Checkbox Case Insensitive Test</title></head>
+<body>
+<!--
+    Tests the XPath translate() fix in WebTester.assertCheckboxPresent / assertCheckboxNotPresent.
+    HtmlUnit 3.x uses a strict XPath 1.0 evaluator (Apache Xalan) that rejects lower-case()
+    (an XPath 2.0 function). The fix uses translate(@type, 'ABC...', 'abc...') for
+    case-insensitive matching. These four checkboxes exercise lowercase, UPPERCASE, and
+    mixed-case type attributes to confirm the translate() expression handles all variants.
+-->
+<form method="GET" action="../params.jsp">
+    <input type="checkbox"  name="cb1" value="1">  <!-- lowercase  -->
+    <input TYPE="CHECKBOX"  name="cb2" value="2">  <!-- UPPERCASE  -->
+    <input type="CheckBox"  name="cb3" value="3">  <!-- MixedCase  -->
+    <input TYPE="CHECKBOX"  name="cb4" value="val1"> <!-- for name+value test -->
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>
