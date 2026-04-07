@@ -18,8 +18,8 @@
  */
 package net.sourceforge.jwebunit.htmlunit;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.WebClientOptions;
+import org.htmlunit.WebClient;
+import org.htmlunit.WebClientOptions;
 import junit.framework.TestCase;
 import net.sourceforge.jwebunit.api.ITestingEngine;
 

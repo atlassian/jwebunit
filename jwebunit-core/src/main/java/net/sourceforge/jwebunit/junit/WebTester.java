@@ -966,7 +966,7 @@ public class WebTester {
     public void assertCheckboxPresent(String checkboxName) {
         assertTrue("Did not find form checkbox with name ["
                 + checkboxName + "].", getTestingEngine().hasElementByXPath(
-                "//input[lower-case(@type)='checkbox' and @name='" + checkboxName + "']"));
+                "//input[translate(@type,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='checkbox' and @name='" + checkboxName + "']"));
     }
 
     /**
@@ -979,7 +979,7 @@ public class WebTester {
         assertTrue("Did not find form checkbox with name ["
                 + checkboxName + "] and value [" + checkboxValue + "].",
                 getTestingEngine().hasElementByXPath(
-                        "//input[lower-case(@type)='checkbox' and @name='" + checkboxName
+                        "//input[translate(@type,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='checkbox' and @name='" + checkboxName
                                 + "' and @value='" + checkboxValue + "']"));
     }
 
@@ -991,7 +991,7 @@ public class WebTester {
     public void assertCheckboxNotPresent(String checkboxName) {
         assertFalse("Found form checkbox with name [" + checkboxName
                 + "] when not expected.", getTestingEngine().hasElementByXPath(
-                "//input[lower-case(@type)='checkbox' and @name='" + checkboxName + "']"));
+                "//input[translate(@type,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='checkbox' and @name='" + checkboxName + "']"));
     }
 
     /**
@@ -1005,7 +1005,7 @@ public class WebTester {
         assertFalse("Found form checkbox with name [" + checkboxName
                 + "] and value [" + checkboxValue + "] when not expected.",
                 getTestingEngine().hasElementByXPath(
-                        "//input[lower-case(@type)='checkbox' and @name='" + checkboxName
+                        "//input[translate(@type,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='checkbox' and @name='" + checkboxName
                                 + "' and @value='" + checkboxValue + "']"));
     }
 

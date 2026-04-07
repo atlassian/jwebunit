@@ -18,8 +18,6 @@
  */
 package net.sourceforge.jwebunit.webdriver;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.WebResponse;
 import net.lightbody.bmp.core.har.Har;
 import net.lightbody.bmp.proxy.LegacyProxyServer;
 import net.lightbody.bmp.proxy.ProxyServer;
@@ -114,7 +112,7 @@ public class WebDriverTestingEngineImpl implements ITestingEngine {
 
     DesiredCapabilities capabilities = new DesiredCapabilities();
     capabilities.setCapability(CapabilityType.PROXY, proxy);
-    capabilities.setCapability(CapabilityType.SUPPORTS_JAVASCRIPT, jsEnabled);
+    capabilities.setCapability("javascriptEnabled", jsEnabled);
     capabilities.setBrowserName("htmlunit");
     capabilities.setVersion("firefox");
 
@@ -233,7 +231,7 @@ public class WebDriverTestingEngineImpl implements ITestingEngine {
   }
 
   /**
-   * Copied from {@link WebClient#throwFailingHttpStatusCodeExceptionIfNecessary(WebResponse)}
+   * Copied from {@link org.htmlunit.WebClient#throwFailingHttpStatusCodeExceptionIfNecessary(org.htmlunit.WebResponse)}
    */
   private void throwFailingHttpStatusCodeExceptionIfNecessary(int statusCode, String url) {
     final boolean successful = (statusCode >= HttpStatus.SC_OK && statusCode < HttpStatus.SC_MULTIPLE_CHOICES)

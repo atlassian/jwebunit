@@ -18,56 +18,54 @@
  */
 package net.sourceforge.jwebunit.htmlunit;
 
-import com.gargoylesoftware.htmlunit.AlertHandler;
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.ConfirmHandler;
-import com.gargoylesoftware.htmlunit.DefaultCredentialsProvider;
-import com.gargoylesoftware.htmlunit.ElementNotFoundException;
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.ImmediateRefreshHandler;
-import com.gargoylesoftware.htmlunit.Page;
-import com.gargoylesoftware.htmlunit.PromptHandler;
-import com.gargoylesoftware.htmlunit.RefreshHandler;
-import com.gargoylesoftware.htmlunit.TextPage;
-import com.gargoylesoftware.htmlunit.TopLevelWindow;
-import com.gargoylesoftware.htmlunit.UnexpectedPage;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.WebResponse;
-import com.gargoylesoftware.htmlunit.WebWindow;
-import com.gargoylesoftware.htmlunit.WebWindowEvent;
-import com.gargoylesoftware.htmlunit.WebWindowListener;
-import com.gargoylesoftware.htmlunit.WebWindowNotFoundException;
-import com.gargoylesoftware.htmlunit.html.DomComment;
-import com.gargoylesoftware.htmlunit.html.DomNode;
-import com.gargoylesoftware.htmlunit.html.FrameWindow;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlButton;
-import com.gargoylesoftware.htmlunit.html.HtmlButtonInput;
-import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlHiddenInput;
-import com.gargoylesoftware.htmlunit.html.HtmlImageInput;
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
-import com.gargoylesoftware.htmlunit.html.HtmlOption;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
-import com.gargoylesoftware.htmlunit.html.HtmlResetInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSelect;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlTable;
-import com.gargoylesoftware.htmlunit.html.HtmlTableCell;
-import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
-import com.gargoylesoftware.htmlunit.html.HtmlTableRow.CellIterator;
-import com.gargoylesoftware.htmlunit.html.HtmlTextArea;
-import com.gargoylesoftware.htmlunit.util.Cookie;
-import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import com.gargoylesoftware.htmlunit.xml.XmlPage;
+import org.htmlunit.AlertHandler;
+import org.htmlunit.BrowserVersion;
+import org.htmlunit.ConfirmHandler;
+import org.htmlunit.DefaultCredentialsProvider;
+import org.htmlunit.ElementNotFoundException;
+import org.htmlunit.FailingHttpStatusCodeException;
+import org.htmlunit.ImmediateRefreshHandler;
+import org.htmlunit.Page;
+import org.htmlunit.PromptHandler;
+import org.htmlunit.RefreshHandler;
+import org.htmlunit.TextPage;
+import org.htmlunit.TopLevelWindow;
+import org.htmlunit.UnexpectedPage;
+import org.htmlunit.WebClient;
+import org.htmlunit.WebResponse;
+import org.htmlunit.WebWindow;
+import org.htmlunit.WebWindowEvent;
+import org.htmlunit.WebWindowListener;
+import org.htmlunit.WebWindowNotFoundException;
+import org.htmlunit.html.DomComment;
+import org.htmlunit.html.DomNode;
+import org.htmlunit.html.FrameWindow;
+import org.htmlunit.html.HtmlAnchor;
+import org.htmlunit.html.HtmlButton;
+import org.htmlunit.html.HtmlButtonInput;
+import org.htmlunit.html.HtmlCheckBoxInput;
+import org.htmlunit.html.HtmlElement;
+import org.htmlunit.html.HtmlForm;
+import org.htmlunit.html.HtmlHiddenInput;
+import org.htmlunit.html.HtmlImageInput;
+import org.htmlunit.html.HtmlInput;
+import org.htmlunit.html.HtmlOption;
+import org.htmlunit.html.HtmlPage;
+import org.htmlunit.html.HtmlRadioButtonInput;
+import org.htmlunit.html.HtmlResetInput;
+import org.htmlunit.html.HtmlSelect;
+import org.htmlunit.html.HtmlSubmitInput;
+import org.htmlunit.html.HtmlTable;
+import org.htmlunit.html.HtmlTableCell;
+import org.htmlunit.html.HtmlTableRow;
+import org.htmlunit.html.HtmlTableRow.CellIterator;
+import org.htmlunit.html.HtmlTextArea;
+import org.htmlunit.util.Cookie;
+import org.htmlunit.util.NameValuePair;
+import org.htmlunit.xml.XmlPage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetAddress;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -94,7 +92,6 @@ import net.sourceforge.jwebunit.javascript.JavascriptAlert;
 import net.sourceforge.jwebunit.javascript.JavascriptConfirm;
 import net.sourceforge.jwebunit.javascript.JavascriptPrompt;
 import net.sourceforge.jwebunit.util.TestContext;
-import org.apache.http.auth.AuthScope;
 import org.apache.regexp.RE;
 import org.apache.regexp.RESyntaxException;
 import org.slf4j.Logger;
@@ -286,9 +283,8 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
     for (Cookie cookie : cookies) {
       javax.servlet.http.Cookie c = new javax.servlet.http.Cookie(
         cookie.getName(), cookie.getValue());
-      c.setComment(cookie.toHttpClient().getComment());
       c.setDomain(cookie.getDomain());
-      Date expire = cookie.toHttpClient().getExpiryDate();
+      Date expire = cookie.getExpires();
       if (expire == null) {
         c.setMaxAge(-1);
       } else {
@@ -298,8 +294,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
         c.setMaxAge(second.intValue());
       }
       c.setPath(cookie.getPath());
-      c.setSecure(cookie.toHttpClient().isSecure());
-      c.setVersion(cookie.toHttpClient().getVersion());
+      c.setSecure(cookie.isSecure());
       result.add(c);
     }
     return result;
@@ -462,7 +457,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
       for (HtmlElement e : form.getHtmlElementDescendants()) {
         if (e instanceof HtmlInput && e.getAttribute("name").equals(paramName)) {
           // we found it
-          return ((HtmlInput) e).getValueAttribute();
+          return ((HtmlInput) e).getValue();
         }
         if (e instanceof HtmlTextArea && e.getAttribute("name").equals(paramName)) {
           // we found it
@@ -479,7 +474,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
         if (outside_element.getEnclosingForm() != null) {
           form = outside_element.getEnclosingForm();
         }
-        return ((HtmlInput) outside_element).getValueAttribute();
+        return ((HtmlInput) outside_element).getValue();
       }
       if (outside_element instanceof HtmlTextArea) {
         // set current form if not null
@@ -544,7 +539,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
       for (HtmlElement e : form.getHtmlElementDescendants()) {
         if (e instanceof HtmlInput && e.getAttribute("name").equals(paramName)) {
           // we found it
-          ((HtmlInput) e).setValueAttribute(text);
+          ((HtmlInput) e).setValue(text);
           return;
         }
         if (e instanceof HtmlTextArea && e.getAttribute("name").equals(paramName)) {
@@ -559,7 +554,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
     HtmlElement outside_element = getHtmlElementWithAttribute("name", paramName);
     if (outside_element != null) {
       if (outside_element instanceof HtmlInput) {
-        ((HtmlInput) outside_element).setValueAttribute(text);
+        ((HtmlInput) outside_element).setValue(text);
         // set current form if not null
         if (outside_element.getEnclosingForm() != null) {
           form = outside_element.getEnclosingForm();
@@ -683,7 +678,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
 
   private String getSelectOptionValueForLabel(HtmlSelect sel, String label) {
     for (HtmlOption opt : sel.getOptions()) {
-      if (opt.asText().equals(label)) {
+      if (opt.asNormalizedText().equals(label)) {
         return opt.getValueAttribute();
       }
     }
@@ -711,7 +706,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
   private String getSelectOptionLabelForValue(HtmlSelect sel, String value) {
     for (HtmlOption opt : sel.getOptions()) {
       if (opt.getValueAttribute().equals(value)) {
-        return opt.asText();
+        return opt.asNormalizedText();
       }
     }
     throw new RuntimeException("Unable to find option " + value + " for "
@@ -755,13 +750,13 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
   public String getPageText() {
     Page page = win.getEnclosedPage();
     if (page instanceof HtmlPage) {
-      return ((HtmlPage) page).getBody().asText();
+      return ((HtmlPage) page).getBody().asNormalizedText();
     }
     if (page instanceof TextPage) {
       return ((TextPage) page).getContent();
     }
     if (page instanceof XmlPage) {
-      return ((XmlPage) page).asText();
+      return ((XmlPage) page).asNormalizedText();
     }
     if (page instanceof UnexpectedPage) {
       return ((UnexpectedPage) page).getWebResponse()
@@ -876,26 +871,17 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
     DefaultCredentialsProvider creds = new DefaultCredentialsProvider();
     if (getTestContext().hasAuthorization()) {
       creds.addCredentials(getTestContext().getUser(), getTestContext()
-        .getPassword());
+        .getPassword().toCharArray());
     }
     if (getTestContext().hasNTLMAuthorization()) {
-      InetAddress netAddress;
-      String address;
-      try {
-        netAddress = InetAddress.getLocalHost();
-        address = netAddress.getHostName();
-      } catch (UnknownHostException e) {
-        address = "";
-      }
-      creds.addNTLMCredentials(getTestContext().getUser(),
-        getTestContext().getPassword(), "", -1, address,
-        getTestContext().getDomain());
+      creds.addCredentials(getTestContext().getUser(),
+        getTestContext().getPassword().toCharArray());
     }
     if (getTestContext().hasProxyAuthorization()) {
       creds.addCredentials(getTestContext().getProxyUser(),
-        getTestContext().getProxyPasswd(), getTestContext()
+        getTestContext().getProxyPasswd().toCharArray(), getTestContext()
           .getProxyHost(),
-        getTestContext().getProxyPort(), AuthScope.ANY_REALM);
+        getTestContext().getProxyPort(), null);
     }
     wc.setCredentialsProvider(creds);
     wc.addWebWindowListener(new WebWindowListener() {
@@ -1563,7 +1549,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
       for (int col = 0; table.getCellAt(row, col) != null; col++) {
         HtmlTableCell cell = table.getCellAt(row, col);
         if (cell != null) {
-          String cellHtml = cell.asText();
+          String cellHtml = cell.asNormalizedText();
           if (cellHtml.indexOf(text) != -1) {
             return true;
           }
@@ -1583,7 +1569,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
       CellIterator cellIt = htmlRow.getCellIterator();
       while (cellIt.hasNext()) {
         HtmlTableCell htmlCell = cellIt.nextCell();
-        newRow.appendCell(new Cell(htmlCell.asText(), htmlCell
+        newRow.appendCell(new Cell(htmlCell.asNormalizedText(), htmlCell
           .getColumnSpan(), htmlCell.getRowSpan()));
       }
       result.appendRow(newRow);
@@ -1936,7 +1922,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
     List<HtmlAnchor> lnks = ((HtmlPage) win.getEnclosedPage()).getAnchors();
     int count = 0;
     for (HtmlAnchor lnk : lnks) {
-      if ((lnk.asText().indexOf(linkText) >= 0) && (count++ == index)) {
+      if ((lnk.asNormalizedText().indexOf(linkText) >= 0) && (count++ == index)) {
         return lnk;
       }
     }
@@ -1947,7 +1933,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
     List<HtmlAnchor> lnks = ((HtmlPage) win.getEnclosedPage()).getAnchors();
     int count = 0;
     for (HtmlAnchor lnk : lnks) {
-      if ((lnk.asText().equals(linkText)) && (count++ == index)) {
+      if ((lnk.asNormalizedText().equals(linkText)) && (count++ == index)) {
         return lnk;
       }
     }
@@ -2015,7 +2001,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
     if (e == null) {
       return null;
     }
-    return e.asText();
+    return e.asNormalizedText();
   }
 
   /**
@@ -2221,7 +2207,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
     for (String option : options) {
       boolean found = false;
       for (HtmlOption opt : sel.getOptions()) {
-        if (opt.asText().equals(option)) {
+        if (opt.asNormalizedText().equals(option)) {
           sel.setSelectedAttribute(opt, false);
           found = true;
           break;
@@ -2248,7 +2234,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
     for (String option : options) {
       boolean found = false;
       for (HtmlOption opt : sel.getOptions()) {
-        if (opt.asText().equals(option)) {
+        if (opt.asNormalizedText().equals(option)) {
           sel.setSelectedAttribute(opt, false);
           found = true;
           break;
@@ -2273,7 +2259,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
    * @param text text to check for.
    */
   private boolean isTextInElement(HtmlElement element, String text) {
-    return element.asText().indexOf(text) >= 0;
+    return element.asNormalizedText().indexOf(text) >= 0;
   }
 
   @Override
@@ -2289,7 +2275,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
    */
   private boolean isMatchInElement(HtmlElement element, String regexp) {
     RE re = getRE(regexp);
-    return re.match(element.asText());
+    return re.match(element.asNormalizedText());
   }
 
   private RE getRE(String regexp) {
@@ -2499,7 +2485,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
    * An alternative to setting the {@link TestContext#setUserAgent(String) user agent string manually}
    * is to provide it with all the information for a complete browser version.
    *
-   * @see com.gargoylesoftware.htmlunit.BrowserVersion
+   * @see org.htmlunit.BrowserVersion
    * @return The default browser version
    */
   public BrowserVersion getDefaultBrowserVersion() {
@@ -2510,7 +2496,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
    * An alternative to setting the {@link TestContext#setUserAgent(String) user agent string manually}
    * is to provide it with all the information for a complete browser version.
    *
-   * @see com.gargoylesoftware.htmlunit.BrowserVersion
+   * @see org.htmlunit.BrowserVersion
    * @param defaultBrowserVersion version to set as default for this engine instance
    */
   public void setDefaultBrowserVersion(BrowserVersion defaultBrowserVersion) {
