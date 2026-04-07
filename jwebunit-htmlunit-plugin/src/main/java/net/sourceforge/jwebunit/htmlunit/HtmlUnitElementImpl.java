@@ -21,12 +21,12 @@
  */
 package net.sourceforge.jwebunit.htmlunit;
 
-import com.gargoylesoftware.htmlunit.html.DomElement;
-import com.gargoylesoftware.htmlunit.html.DomNode;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
-import com.gargoylesoftware.htmlunit.html.HtmlOption;
-import com.gargoylesoftware.htmlunit.html.HtmlTextArea;
+import org.htmlunit.html.DomElement;
+import org.htmlunit.html.DomNode;
+import org.htmlunit.html.HtmlElement;
+import org.htmlunit.html.HtmlInput;
+import org.htmlunit.html.HtmlOption;
+import org.htmlunit.html.HtmlTextArea;
 import net.sourceforge.jwebunit.api.IElement;
 
 import java.util.ArrayList;
@@ -57,6 +57,9 @@ public class HtmlUnitElementImpl implements IElement {
    * @see net.sourceforge.jwebunit.api.IElement#attribute(java.lang.String)
    */
   public String getAttribute(String name) {
+    if ("value".equals(name) && element instanceof HtmlInput) {
+      return ((HtmlInput) element).getValue();
+    }
     if ("value".equals(name) && element instanceof HtmlOption) {
       // for options, we want text if no value was specified
       return ((HtmlOption) element).getValueAttribute();
@@ -163,8 +166,8 @@ public class HtmlUnitElementImpl implements IElement {
    */
   public void setAttribute(String name, String value) {
     if ("value".equals(name) && element instanceof HtmlInput) {
-      // for HtmlInputs, we want to run any onChange code if the value changes
-      ((HtmlInput) element).setValueAttribute(value);
+      // use setValue() to change the live value without affecting the default/reset value
+      ((HtmlInput) element).setValue(value);
     } else {
       element.setAttribute(name, value);
     }

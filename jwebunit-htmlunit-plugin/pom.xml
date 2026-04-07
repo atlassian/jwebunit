@@ -41,9 +41,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>net.sourceforge.htmlunit</groupId>
+            <groupId>org.htmlunit</groupId>
             <artifactId>htmlunit</artifactId>
-            <version>2.36.0</version>
+            <version>3.9.0</version>
             <exclusions>
               <exclusion>
                 <artifactId>commons-logging</artifactId>

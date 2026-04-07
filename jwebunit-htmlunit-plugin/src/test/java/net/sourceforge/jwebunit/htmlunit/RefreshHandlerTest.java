@@ -20,8 +20,8 @@ package net.sourceforge.jwebunit.htmlunit;
 
 import org.junit.After;
 
-import com.gargoylesoftware.htmlunit.ThreadedRefreshHandler;
-import com.gargoylesoftware.htmlunit.WaitingRefreshHandler;
+import org.htmlunit.ThreadedRefreshHandler;
+import org.htmlunit.WaitingRefreshHandler;
 import net.sourceforge.jwebunit.tests.JWebUnitAPITestCase;
 import org.junit.Test;
 
