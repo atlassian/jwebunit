@@ -81,7 +81,7 @@ public class TableTest extends TestCase {
      */
     public final void testAssertSubTableMatch() {
         String[] r1 = { "Mal(e|r)s", "1\\.?", "0\\.003", "40\\%" };
-        String[] r2 = { "Fem(.)les", "1\\.?", "0[:punct:]002", "43\\%" };
+        String[] r2 = { "Fem(.)les", "1\\.?", "0\\p{Punct}002", "43\\%" };
         Table sub = new Table();
         sub.appendRow(new Row(r1));
         sub.appendRow(new Row(r2));

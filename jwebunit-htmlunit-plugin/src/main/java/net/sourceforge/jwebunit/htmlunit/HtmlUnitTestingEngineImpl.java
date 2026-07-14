@@ -76,6 +76,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
+
 import net.sourceforge.jwebunit.api.HttpHeader;
 import net.sourceforge.jwebunit.api.IElement;
 import net.sourceforge.jwebunit.api.ITestingEngine;
@@ -95,8 +97,6 @@ import net.sourceforge.jwebunit.javascript.JavascriptConfirm;
 import net.sourceforge.jwebunit.javascript.JavascriptPrompt;
 import net.sourceforge.jwebunit.util.TestContext;
 import org.apache.http.auth.AuthScope;
-import org.apache.regexp.RE;
-import org.apache.regexp.RESyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
@@ -2288,16 +2288,8 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
    * @param regexp regexp to match.
    */
   private boolean isMatchInElement(HtmlElement element, String regexp) {
-    RE re = getRE(regexp);
-    return re.match(element.asText());
-  }
-
-  private RE getRE(String regexp) {
-    try {
-      return new RE(regexp, RE.MATCH_SINGLELINE);
-    } catch (RESyntaxException e) {
-      throw new RuntimeException(e);
-    }
+    Pattern pattern = Pattern.compile(regexp);
+    return pattern.matcher(element.asText()).find();
   }
 
   /**

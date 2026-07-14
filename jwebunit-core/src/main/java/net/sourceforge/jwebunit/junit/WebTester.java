@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.Cookie;
@@ -62,9 +63,6 @@ import net.sourceforge.jwebunit.javascript.JavascriptConfirm;
 import net.sourceforge.jwebunit.javascript.JavascriptPrompt;
 import net.sourceforge.jwebunit.util.TestContext;
 import net.sourceforge.jwebunit.util.TestingEngineRegistry;
-
-import org.apache.regexp.RE;
-import org.apache.regexp.RESyntaxException;
 
 /**
  * Provides a high-level API for basic web application navigation and validation by providing
@@ -523,8 +521,8 @@ public class WebTester {
      * @param regexp
      */
     public void assertMatch(String regexp) {
-        RE re = getRE(regexp);
-        if (!re.match(getTestingEngine().getPageText()))
+        Pattern pattern = Pattern.compile(regexp);
+        if (!pattern.matcher(getTestingEngine().getPageText()).find())
             fail("Expected rexexp not matched in response: [" + regexp
                     + "]");
     }
@@ -557,8 +555,8 @@ public class WebTester {
      * @param text
      */
     public void assertMatch(String message, String regexp, String text) {
-        RE re = getRE(regexp);
-        if (!re.match(text))
+        Pattern pattern = Pattern.compile(regexp);
+        if (!pattern.matcher(text).find())
             fail(message);
     }
 
@@ -569,8 +567,8 @@ public class WebTester {
      * @param text
      */
     public void assertNotMatch(String message, String regexp, String text) {
-        RE re = getRE(regexp);
-        if (re.match(text))
+        Pattern pattern = Pattern.compile(regexp);
+        if (pattern.matcher(text).find())
             fail(message);
     }
 
@@ -1081,16 +1079,11 @@ public class WebTester {
     public void assertFormElementMatch(String formElementName, String regexp) {
       // how can we @deprecate this if there is no available alternative?
         assertFormElementPresent(formElementName);
-        RE re = null;
-        try {
-            re = new RE(regexp, RE.MATCH_SINGLELINE);
-        } catch (RESyntaxException e) {
-            fail(e.toString());
-        }
+        Pattern pattern = Pattern.compile(regexp);
         assertTrue("Unable to match [" + regexp + "] in form element \""
-                + formElementName + "\"", re.match(getTestingEngine()
+                + formElementName + "\"", pattern.matcher(getTestingEngine()
                 .getElementAttributByXPath(
-                        "//input[@name='" + formElementName + "']", "value")));
+                        "//input[@name='" + formElementName + "']", "value")).find());
     }
 
     /**
@@ -1702,12 +1695,12 @@ public class WebTester {
         assertEquals(regexps.length, getTestingEngine()
                 .getSelectedOptions(selectName).length);
         for (int i = 0; i < regexps.length; i++) {
-            RE re = getRE(regexps[i]);
+            Pattern pattern = Pattern.compile(regexps[i]);
             assertTrue("Unable to match [" + regexps[i]
                     + "] in option \""
                     + getTestingEngine().getSelectedOptions(selectName)[i]
-                    + "\"", re.match(getTestingEngine().getSelectedOptions(
-                    selectName)[i]));
+                    + "\"", pattern.matcher(getTestingEngine().getSelectedOptions(
+                    selectName)[i]).find());
         }
     }
 
@@ -1724,12 +1717,12 @@ public class WebTester {
         assertEquals(regexps.length, getTestingEngine()
                 .getSelectedOptions(selectName, index).length);
         for (int i = 0; i < regexps.length; i++) {
-            RE re = getRE(regexps[i]);
+            Pattern pattern = Pattern.compile(regexps[i]);
             assertTrue("Unable to match [" + regexps[i]
                     + "] in option \""
                     + getTestingEngine().getSelectedOptions(selectName, index)[i]
-                    + "\" at index " + index, re.match(getTestingEngine().getSelectedOptions(
-                    selectName, index)[i]));
+                    + "\" at index " + index, pattern.matcher(getTestingEngine().getSelectedOptions(
+                    selectName, index)[i]).find());
         }
     }
 
@@ -2319,17 +2312,12 @@ public class WebTester {
      */
     public void assertCookieValueMatch(String cookieName, String regexp) {
         assertCookiePresent(cookieName);
-        RE re = null;
-        try {
-            re = new RE(regexp, RE.MATCH_SINGLELINE);
-        } catch (RESyntaxException e) {
-            fail(e.getMessage());
-        }
+        Pattern pattern = Pattern.compile(regexp);
         List<?> cookies = getTestingEngine().getCookies();
         for (Iterator<?> i = cookies.iterator(); i.hasNext();) {
             Cookie c = (Cookie) i.next();
             if (c.getName().equals(cookieName) &&
-                    re.match(c.getValue())) {
+                    pattern.matcher(c.getValue()).find()) {
                 return;
             }
         }
@@ -2843,16 +2831,12 @@ public class WebTester {
      */
     public void assertLabelMatches(String regexp) {
       // get regexp
-        RE re = null;
-        try {
-            re = new RE(regexp, RE.MATCH_SINGLELINE);
-        } catch (RESyntaxException e) {
-            fail(e.toString());
-        }
+      Pattern pattern = Pattern.compile(regexp);
+
 
         // get all labels
       for (IElement e : getTestingEngine().getElementsByXPath("//label")) {
-        if (e.getName().equals("label") && re.match( e.getTextContent() ))
+        if (e.getName().equals("label") && pattern.matcher( e.getTextContent() ).find())
           return;	// label found
       }
       fail("No label found with text matching [" + regexp + "]");
@@ -3272,16 +3256,6 @@ public class WebTester {
             }
         }
         return testingEngineKey;
-    }
-
-    private RE getRE(String regexp) {
-        RE re = null;
-        try {
-            re = new RE(regexp, RE.MATCH_SINGLELINE);
-        } catch (RESyntaxException e) {
-            fail(e.toString());
-        }
-        return re;
     }
 
     /**
