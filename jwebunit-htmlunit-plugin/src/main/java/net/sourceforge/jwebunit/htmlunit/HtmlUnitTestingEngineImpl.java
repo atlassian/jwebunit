@@ -2289,7 +2289,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
    */
   private boolean isMatchInElement(HtmlElement element, String regexp) {
     Pattern pattern = Pattern.compile(regexp);
-    return pattern.matcher(element.asText()).find();
+    return pattern.matcher(element.asNormalizedText()).find();
   }
 
   /**
