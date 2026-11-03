@@ -1,6 +1,6 @@
 ### JWebUnit
 
-[![Build Status](https://travis-ci.org/JWebUnit/jwebunit.svg)](https://travis-ci.org/JWebUnit/jwebunit)
+[![Build](https://github.com/atlassian/jwebunit/actions/workflows/build.yml/badge.svg)](https://github.com/atlassian/jwebunit/actions/workflows/build.yml)
 
 https://jwebunit.github.io/jwebunit/
 
