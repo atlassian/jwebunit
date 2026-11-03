@@ -683,7 +683,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
 
   private String getSelectOptionValueForLabel(HtmlSelect sel, String label) {
     for (HtmlOption opt : sel.getOptions()) {
-      if (opt.asText().equals(label)) {
+      if (opt.asNormalizedText().equals(label)) {
         return opt.getValueAttribute();
       }
     }
@@ -711,7 +711,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
   private String getSelectOptionLabelForValue(HtmlSelect sel, String value) {
     for (HtmlOption opt : sel.getOptions()) {
       if (opt.getValueAttribute().equals(value)) {
-        return opt.asText();
+        return opt.asNormalizedText();
       }
     }
     throw new RuntimeException("Unable to find option " + value + " for "
@@ -755,13 +755,13 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
   public String getPageText() {
     Page page = win.getEnclosedPage();
     if (page instanceof HtmlPage) {
-      return ((HtmlPage) page).getBody().asText();
+      return ((HtmlPage) page).getBody().asNormalizedText();
     }
     if (page instanceof TextPage) {
       return ((TextPage) page).getContent();
     }
     if (page instanceof XmlPage) {
-      return ((XmlPage) page).asText();
+      return ((XmlPage) page).asNormalizedText();
     }
     if (page instanceof UnexpectedPage) {
       return ((UnexpectedPage) page).getWebResponse()
@@ -1563,7 +1563,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
       for (int col = 0; table.getCellAt(row, col) != null; col++) {
         HtmlTableCell cell = table.getCellAt(row, col);
         if (cell != null) {
-          String cellHtml = cell.asText();
+          String cellHtml = cell.asNormalizedText();
           if (cellHtml.indexOf(text) != -1) {
             return true;
           }
@@ -1583,7 +1583,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
       CellIterator cellIt = htmlRow.getCellIterator();
       while (cellIt.hasNext()) {
         HtmlTableCell htmlCell = cellIt.nextCell();
-        newRow.appendCell(new Cell(htmlCell.asText(), htmlCell
+        newRow.appendCell(new Cell(htmlCell.asNormalizedText(), htmlCell
           .getColumnSpan(), htmlCell.getRowSpan()));
       }
       result.appendRow(newRow);
@@ -1936,7 +1936,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
     List<HtmlAnchor> lnks = ((HtmlPage) win.getEnclosedPage()).getAnchors();
     int count = 0;
     for (HtmlAnchor lnk : lnks) {
-      if ((lnk.asText().indexOf(linkText) >= 0) && (count++ == index)) {
+      if ((lnk.asNormalizedText().indexOf(linkText) >= 0) && (count++ == index)) {
         return lnk;
       }
     }
@@ -1947,7 +1947,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
     List<HtmlAnchor> lnks = ((HtmlPage) win.getEnclosedPage()).getAnchors();
     int count = 0;
     for (HtmlAnchor lnk : lnks) {
-      if ((lnk.asText().equals(linkText)) && (count++ == index)) {
+      if ((lnk.asNormalizedText().equals(linkText)) && (count++ == index)) {
         return lnk;
       }
     }
@@ -2015,7 +2015,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
     if (e == null) {
       return null;
     }
-    return e.asText();
+    return e.asNormalizedText();
   }
 
   /**
@@ -2221,7 +2221,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
     for (String option : options) {
       boolean found = false;
       for (HtmlOption opt : sel.getOptions()) {
-        if (opt.asText().equals(option)) {
+        if (opt.asNormalizedText().equals(option)) {
           sel.setSelectedAttribute(opt, false);
           found = true;
           break;
@@ -2248,7 +2248,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
     for (String option : options) {
       boolean found = false;
       for (HtmlOption opt : sel.getOptions()) {
-        if (opt.asText().equals(option)) {
+        if (opt.asNormalizedText().equals(option)) {
           sel.setSelectedAttribute(opt, false);
           found = true;
           break;
@@ -2273,7 +2273,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
    * @param text text to check for.
    */
   private boolean isTextInElement(HtmlElement element, String text) {
-    return element.asText().indexOf(text) >= 0;
+    return element.asNormalizedText().indexOf(text) >= 0;
   }
 
   @Override
@@ -2289,7 +2289,7 @@ public class HtmlUnitTestingEngineImpl implements ITestingEngine {
    */
   private boolean isMatchInElement(HtmlElement element, String regexp) {
     RE re = getRE(regexp);
-    return re.match(element.asText());
+    return re.match(element.asNormalizedText());
   }
 
   private RE getRE(String regexp) {
