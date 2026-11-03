@@ -42,11 +42,9 @@ import net.sourceforge.jwebunit.javascript.JavascriptAlert;
 import net.sourceforge.jwebunit.javascript.JavascriptConfirm;
 import net.sourceforge.jwebunit.javascript.JavascriptPrompt;
 import net.sourceforge.jwebunit.util.TestContext;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpStatus;
-import org.apache.regexp.RE;
-import org.apache.regexp.RESyntaxException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
@@ -74,6 +72,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * Acts as the wrapper for Webdriver access. A testing engine is initialized with a given URL, and maintains
@@ -1018,16 +1017,8 @@ public class WebDriverTestingEngineImpl implements ITestingEngine {
    * @param regexp regexp to match.
    */
   private boolean isMatchInElement(WebElement element, String regexp) {
-    RE re = getRE(regexp);
-    return re.match(element.getText());
-  }
-
-  private RE getRE(String regexp) {
-    try {
-      return new RE(regexp, RE.MATCH_SINGLELINE);
-    } catch (RESyntaxException e) {
-      throw new RuntimeException(e);
-    }
+    Pattern pattern = Pattern.compile(regexp);
+    return pattern.matcher(element.getText()).find();
   }
 
   public void setExpectedJavaScriptAlert(JavascriptAlert[] alerts) throws ExpectedJavascriptAlertException {

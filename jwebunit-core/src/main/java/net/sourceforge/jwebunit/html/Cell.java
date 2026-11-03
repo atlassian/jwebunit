@@ -18,9 +18,9 @@
  */
 package net.sourceforge.jwebunit.html;
 
-import org.apache.regexp.RE;
-import org.apache.regexp.RESyntaxException;
 import org.junit.Assert;
+
+import java.util.regex.Pattern;
 
 /**
  * Represents a cell of an html table - a string value spanning an indicated amount of columns.
@@ -101,9 +101,10 @@ public class Cell {
    * @param c given cell
    */
   public void assertMatch(Cell c) {
-    RE re = getRE(c.getValue());
-    Assert.assertTrue(c.getValue() + " do not match " + this.getValue(), re
-      .match(this.getValue()));
+    Pattern pattern = Pattern.compile(c.getValue());
+
+    Assert.assertTrue(c.getValue() + " do not match " + this.getValue(), pattern
+      .matcher(this.getValue()).find());
     Assert.assertTrue("Expected colspan was " + c.getColspan()
       + " but was " + this.getColspan(), this.getColspan() == c
       .getColspan());
@@ -129,23 +130,7 @@ public class Cell {
    * @return true if the current cell matches given text.
    */
   public boolean match(String regexp) {
-    RE re = getRE(regexp);
-    return re.match(this.getValue());
-  }
-
-  /**
-   * Create a regexp.
-   *
-   * @param regexp regexp pattern
-   * @return regexp object
-   */
-  private RE getRE(String regexp) {
-    RE re = null;
-    try {
-      re = new RE(regexp, RE.MATCH_SINGLELINE);
-    } catch (RESyntaxException e) {
-      Assert.fail(e.toString());
-    }
-    return re;
+    Pattern pattern = Pattern.compile(regexp);
+    return pattern.matcher(this.getValue()).find();
   }
 }

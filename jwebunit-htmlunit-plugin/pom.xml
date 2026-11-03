@@ -22,7 +22,7 @@
     <parent>
         <artifactId>jwebunit</artifactId>
         <groupId>net.sourceforge.jwebunit</groupId>
-        <version>3.4-atlassian-7-SNAPSHOT</version>
+        <version>3.5.0-atlassian-1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -50,6 +50,26 @@
                 <groupId>commons-logging</groupId>
               </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.20.0</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.22.0</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.12.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.15.0</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
